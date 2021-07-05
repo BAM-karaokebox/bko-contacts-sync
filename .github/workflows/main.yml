@@ -1,0 +1,33 @@
+# This is a simple workflow to synchronize BAM Karaoke Online's contacts.
+#
+# It relies on simple scripts to automate the synchronization and run
+# it periodically using a cron schedule.
+#
+# It works as follows:
+#  - Contacts are retrieved from the AWS Cognito user pool as JSON.
+#  - JSON-stored contacts are re-processed and transformed to a CSV.
+#  - CSV-stored contacts are uploaded to a SendInBlue contacts list.
+#
+
+name: BAM Karaoke Online Contacts Sync
+
+on:
+  schedule:
+    - cron:  '*/5 * * * *'
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# single-job workflow to sync contacts
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so we can access scripts
+      - uses: actions/checkout@v2
+
+      - name: Cognito to SendInblue Synchronization
+        run: |
+          # run script
+          "${GITHUB_WORKSPACE}/.github/bko-contacts-sync.sh"
