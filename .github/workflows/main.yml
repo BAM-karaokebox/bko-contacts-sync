@@ -32,4 +32,4 @@ jobs:
           npm install cognito-backup-restore
 
       - name: Cognito to SendInblue Synchronization
-        run: "${GITHUB_WORKSPACE}/.github/bko-contacts-sync.sh"
+        run: "${GITHUB_WORKSPACE}/scripts/bko-contacts-sync.sh"
