@@ -39,4 +39,5 @@ jobs:
           AWS_COGNITO_POOL_ID: ${{ secrets.AWS_COGNITO_POOL_ID }}
           SENDINBLUE_LIST_ID: ${{ secrets.SENDINBLUE_LIST_ID }}
           SENDINBLUE_API_KEY: ${{ secrets.SENDINBLUE_API_KEY }}
-        run: "${GITHUB_WORKSPACE}/scripts/bko-contacts-sync.sh"
+        working-directory: "${GITHUB_WORKSPACE}/scripts"
+        run: "./bko-contacts-sync.sh"
