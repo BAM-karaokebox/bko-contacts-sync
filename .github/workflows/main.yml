@@ -32,4 +32,11 @@ jobs:
           npm install cognito-backup-restore
 
       - name: Cognito to SendInblue Synchronization
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_COGNITO_POOL_ID: ${{ secrets.AWS_COGNITO_POOL_ID }}
+          SENDINBLUE_LIST_ID: ${{ secrets.SENDINBLUE_LIST_ID }}
+          SENDINBLUE_API_KEY: ${{ secrets.SENDINBLUE_API_KEY }}
         run: "${GITHUB_WORKSPACE}/scripts/bko-contacts-sync.sh"
