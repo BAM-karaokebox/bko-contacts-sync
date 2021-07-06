@@ -30,7 +30,7 @@ jobs:
       - name: Install Pre-Requisites
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/
-          npm install -g cognito-backup-restore
+          npm install cognito-backup-restore
 
       - name: Cognito to SendInblue Synchronization
         env:
