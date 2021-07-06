@@ -43,3 +43,9 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/
           ./bko-contacts-sync.sh
+
+      - name: Cleanup
+        if: ${{ always() }}
+        run: |
+          cd ${GITHUB_WORKSPACE}/scripts/
+          rm -f *.json *.csv *.txt
