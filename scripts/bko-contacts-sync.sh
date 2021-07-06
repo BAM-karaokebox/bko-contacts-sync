@@ -33,8 +33,8 @@ if [ -n "${AWS_COGNITO_POOL_ID}" ] && \
 	            ./bko-cognito-transform-json-to-csv.sh "${AWS_COGNITO_POOL_ID}.json" > "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv" && \
 	            echo " > done (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv)") && \
         ( echo "Importing/Updating contacts in SendInBlue (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv)..." && \
-	            ./sendinblue-importcontacts.sh "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv" "${SENDINBLUE_LIST_ID}" "${SENDINBLUE_API_KEY}" | \
-	                jq -r '.processId' > "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid"  && \
+	            ./sendinblue-importcontacts.sh "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv" "${SENDINBLUE_LIST_ID}" "${SENDINBLUE_API_KEY}" &&
+              cat output.json | jq -r '.processId' > "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid"  && \
 	            echo " > done (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid)") && \
         ( echo "Waiting a few seconds for processing..." && \
 	            sleep 10 && \
