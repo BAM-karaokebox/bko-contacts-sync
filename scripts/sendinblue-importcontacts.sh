@@ -4,10 +4,26 @@ CSV_FILE_PATH="${1}"
 SENDINBLUE_LIST_ID="${2}"
 SENDINBLUE_API_KEY="${3}"
 
+csv_file_to_json_payload() {
+    echo '
+        {
+            "listIds": [
+                '"${SENDINBLUE_LIST_ID}"'
+            ],
+            "emailBlacklist": false,
+            "smsBlacklist": false,
+            "updateExistingContacts": true,
+            "emptyContactsAttributes": false,
+            "fileBody": ' > input.json
+    cat "${CSV_FILE_PATH}" | sed 's/,/;/g' | jq -Rras . >> input.json
+    echo '
+        }
+' >> input.json
+}
+
 if [ -n "${CSV_FILE_PATH}" ] && [ -n "${SENDINBLUE_LIST_ID}" ]; then
     if [ -f "${CSV_FILE_PATH}" ]; then
-        CSV_FILE_CONTENT="$(cat "${CSV_FILE_PATH}" | sed 's/,/;/g' | jq -Rras .)"
-
+        csv_file_to_json_payload
         curl \
 	          -s \
 	          --request POST \
@@ -15,18 +31,7 @@ if [ -n "${CSV_FILE_PATH}" ] && [ -n "${SENDINBLUE_LIST_ID}" ]; then
 	          --header "Accept: application/json" \
 	          --header "Content-Type: application/json" \
 	          --header "api-key: ${SENDINBLUE_API_KEY}" \
-	          --data '
-{
-  "listIds": [
-    '"${SENDINBLUE_LIST_ID}"'
-  ],
-  "emailBlacklist": false,
-  "smsBlacklist": false,
-  "updateExistingContacts": true,
-  "emptyContactsAttributes": false,
-  "fileBody": '"${CSV_FILE_CONTENT}"'
-}
-';
+	          --data @input.json
     else
         echo "Please provide a valid CSV input file."
         exit 24;
