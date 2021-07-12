@@ -16,27 +16,29 @@ csv_file_to_json_payload() {
             "smsBlacklist": false,
             "updateExistingContacts": true,
             "emptyContactsAttributes": false,
-            "fileBody": _PLACEHOLDER_
-         }' > payload.template.json
+            "fileBody": ' | tr -d '\n' | tr -d '\r' > payload.header.json
+    echo '}' > payload.footer.json
     cat "${CSV_FILE_PATH}" | sed 's/,/;/g' > data.csv
-    cat data.csv | jq --stream -Rr '. | @json' | \
-        sed -e 's/^"//' -e 's/"$//' | sed '1s/^/"/' | sed '$s/$/"/' > payload.data.json
-    sed -e "/_PLACEHOLDER_/r payload.data.json" \
-        -e "s///" payload.template.json \
-        > payload.json
+    cat data.csv							\
+	| jq --stream -Rras '.'						\
+        | sed -e 's/^"//' -e 's/"$//' | sed '1s/^/"/' | sed '$s/$/"/' > payload.data.json
+    cat									\
+	payload.header.json						\
+	payload.data.json						\
+	payload.footer.json > payload.json
 }
 
 if [ -n "${CSV_FILE_PATH}" ] && [ -n "${SENDINBLUE_LIST_ID}" ]; then
     if [ -f "${CSV_FILE_PATH}" ]; then
         csv_file_to_json_payload
-        curl \
-	          -s \
-            -o output.json \
-	          --request POST \
-	          --url https://api.sendinblue.com/v3/contacts/import \
-	          --header "Accept: application/json" \
-	          --header "Content-Type: application/json" \
-	          --header "api-key: ${SENDINBLUE_API_KEY}" \
+        curl								\
+	          -s							\
+		  -o output.json					\
+	          --request POST					\
+	          --url https://api.sendinblue.com/v3/contacts/import	\
+	          --header "Accept: application/json"			\
+	          --header "Content-Type: application/json"		\
+	          --header "api-key: ${SENDINBLUE_API_KEY}"		\
 	          --data @payload.json
     else
         echo "Please provide a valid CSV input file."
