@@ -1,0 +1,10 @@
+{
+    "listIds": [
+        __LIST_ID__
+    ],
+    "emailBlacklist": false,
+    "smsBlacklist": false,
+    "updateExistingContacts": true,
+    "emptyContactsAttributes": false,
+    "fileBody": "__DATA__"
+}
