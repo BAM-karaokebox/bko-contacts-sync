@@ -32,6 +32,10 @@ jobs:
           cd ${GITHUB_WORKSPACE}/scripts/
           npm install cognito-backup-restore
 
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "::set-output name=date::$(date +'%Y%m%d-%H%M%S')"
+
       - name: Cognito to SendInblue Synchronization
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
@@ -43,6 +47,23 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/
           ./bko-contacts-sync.sh
+
+      - name: Generate export snapshot
+        env:
+          AWS_COGNITO_POOL_ID: ${{ secrets.AWS_COGNITO_POOL_ID }}
+          EXPORT_FILE: bko-users-${{ steps.timestamp.outputs.date }}.csv
+        run: |
+          cd ${GITHUB_WORKSPACE}/scripts/
+          ./bko-cognito-transform-json-to-csv.sh ${AWS_COGNITO_POOL_ID}.json > ${EXPORT_FILE}
+
+      - name: Archive export snapshot
+        env:
+          EXPORT_FILE: bko-users-${{ steps.timestamp.outputs.date }}.csv
+        uses: Jodebu/upload-to-drive@master
+        with:
+          target: scripts/${{ env.EXPORT_FILE }}
+          credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          folder: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
 
       - name: Cleanup
         if: ${{ always() }}
