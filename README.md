@@ -1,6 +1,17 @@
 # bko-contacts-sync
 Cognito to SendInBlue Contacts Automation
 
+## Description
+
+This repository contains scripts used by our organization to automatically sync our userbase from an AWS Cognito userpool to our SendInBlue CRM system, and to perform periodic exports.
+
+Feel free to check it out and reuse for your own usage.
+
+## Usage
+
+The scripts require a number of environment variables to be defined to run properly.
+Please refer to the scripts' comments.
+
 
 ## Maintenance
 
