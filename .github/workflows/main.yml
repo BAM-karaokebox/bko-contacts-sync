@@ -25,7 +25,7 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so we can access scripts
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Install Pre-Requisites
         run: |
