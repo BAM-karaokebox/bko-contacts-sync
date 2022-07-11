@@ -34,14 +34,14 @@ if [ -n "${AWS_COGNITO_POOL_ID}" ] && \
 	            echo " > done (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv)") && \
         ( echo "Importing/Updating contacts in SendInBlue (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv)..." && \
 	            ./sendinblue-importcontacts.sh "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.csv" "${SENDINBLUE_LIST_ID}" "${SENDINBLUE_API_KEY}" &&
-              cat output.json | jq -r '.processId' > "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid"  && \
+              cat sib-contacts-import.output.json | jq -r '.processId' > "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid"  && \
 	            echo " > done (${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid)") && \
         ( echo "Waiting a few seconds for processing..." && \
 	            sleep 10 && \
 	            echo " > done") && \
         ( echo "Checking process status ($(cat "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid"))..." && \
-	            [ "$(./sendinblue-getprocessstatus.sh "$(cat "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid")" "${SENDINBLUE_API_KEY}")" = "completed" ] && \
-	            echo " > completed") && \
+	      ./sendinblue-waitforprocessstatus.sh "$(cat "${AWS_COGNITO_POOL_ID}_${TIMESTAMP}.import.pid")" "${SENDINBLUE_API_KEY}" && \
+	      echo " > completed") && \
         echo "Synchronization completed successfully."
 else
     usage;

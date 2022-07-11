@@ -30,7 +30,7 @@ if [ -n "${CSV_FILE_PATH}" ] && [ -n "${SENDINBLUE_LIST_ID}" ]; then
         csv_file_to_json_payload
         curl                                                            \
                   -s                                                    \
-                  -o output.json                                        \
+                  -o sib-contacts-import.output.json                    \
                   --request POST                                        \
                   --url https://api.sendinblue.com/v3/contacts/import   \
                   --header "Accept: application/json"                   \
