@@ -12,4 +12,5 @@ get_process_status() {
         --header "api-key: ${SENDINBLUE_API_KEY}"
 }
 
-get_process_status | jq -r ".status"
+get_process_status
+get_process_status | jq --raw-output '.status'
