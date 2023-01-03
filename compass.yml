@@ -1,0 +1,11 @@
+name: bko-contacts-sync
+id: ari:cloud:compass:8d0ffbf6-f848-4e6e-b50c-9f0942a3db3d:component/1d792a34-5b27-4942-8261-794068ee87d9/eee08727-fede-435e-9638-3a1316830780
+description: Cognito to SendInBlue Contacts Automation
+fields:
+  tier: 4
+links:
+  - type: REPOSITORY
+    name: null
+    url: https://github.com/BAM-karaokebox/bko-contacts-sync
+relationships:
+  DEPENDS_ON: []
