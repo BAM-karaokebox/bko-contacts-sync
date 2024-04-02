@@ -13,7 +13,7 @@ name: BAM Karaoke Online Contacts Sync
 
 on:
   schedule:
-    - cron:  '*/5 * * * *'
+    - cron:  '*/15 * * * *'
 
   # Allows to run this workflow manually from the Actions tab
   workflow_dispatch:
